@@ -67,15 +67,16 @@ bool JPY = true;
 bool AUD = true;
 bool CAD = true;
 bool NZD = true;
-string colour = "----Colo(u)r inputs----";
-color Color_USD = 255;
-color Color_EUR = 16760576;
-color Color_GBP = 14772545;
-color Color_CHF = 15658671;
-color Color_JPY = 55295;
-color Color_AUD = 42495;
-color Color_CAD = 128;
-color Color_NZD = 9221330;
+input string colour = "----Colo(u)r inputs----";
+input color Color_USD = 255;
+input color Color_EUR = 16760576;
+input color Color_GBP = 14772545;
+input color Color_CHF = 15658671;
+input color Color_JPY = 55295;
+input color Color_AUD = 42495;
+input color Color_CAD = 128;
+input color Color_NZD = 9221330;
+input color ColorBack = clrDarkGray;
 color colorWeakCross = 55295;
 color colorNormalCross = 55295;
 color colorStrongCross = 55295;
@@ -85,6 +86,7 @@ color colorDifferenceLo = 21588;
 color colorTimeframe = 16777215;
 color colorLevelHigh = 3329330;
 color colorLevelLow = 3937500;
+input string cof = "----Cofficent inputs----";
 input double Cofficent_USD = 0.1;
 input double Cofficent_EUR = 0.2;
 input double Cofficent_GBP = 0.3;
@@ -111,8 +113,8 @@ double getDataBuffers(int Buffer, int shift)
 string getSymbol(int paramSplit)
 {
    string symbol = "";
-   if (paramSplit == 1) symbol = StringSubstr(Symbol(),0, 3);
-   if (paramSplit == 2) symbol = StringSubstr(Symbol(),3, 3);
+   if (paramSplit == 2) symbol = StringSubstr(Symbol(),0, 3);
+   if (paramSplit == 1) symbol = StringSubstr(Symbol(),3, 3);
    return symbol;
 }
 
@@ -175,6 +177,14 @@ int OnInit()
    
    SetIndexStyle(0,DRAW_LINE,EMPTY,2,color0buf);
    SetIndexStyle(1,DRAW_LINE,EMPTY,2,color1buf);
+   
+   ObjectCreate(0,"Fon",OBJ_RECTANGLE_LABEL,getWindowIndicator(),0,0);
+   ObjectSetInteger(0,"Fon",OBJPROP_XDISTANCE,0);
+   ObjectSetInteger(0,"Fon",OBJPROP_YDISTANCE,0);
+   ObjectSetInteger(0,"Fon",OBJPROP_XSIZE,1980);
+   ObjectSetInteger(0,"Fon",OBJPROP_YSIZE,1500);
+   ObjectSetInteger(0,"Fon",OBJPROP_BGCOLOR,ColorBack);
+   ObjectSetInteger(0,"Fon",OBJPROP_BACK, true);
 //---
    return(INIT_SUCCEEDED);
   }

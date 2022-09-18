@@ -1,5 +1,5 @@
 
-![](https://i.imgur.com/ItSXzph.png)
+![](https://i.imgur.com/cdSXQRi.png)
 
 ### Setup indicator
 
