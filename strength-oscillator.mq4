@@ -37,10 +37,10 @@ double         ZerroBuffer[];
 double         UpBuffer[];
 double         DownBuffer[];
 //--- inputs
-string gen = "----General inputs----";
+input string gen = "----General inputs----";
 bool autoSymbols = false;
 string symbolsToWeigh = "AUDCAD,AUDCHF,AUDJPY,AUDNZD,AUDUSD,CADJPY,CHFJPY,EURAUD,EURCAD,EURJPY,EURNZD,EURUSD,GBPAUD,GBPCAD,GBPCHF,GBPJPY,GBPNZD,GBPUSD,NZDCHF,NZDJPY,NZDUSD,USDCAD,USDCHF,USDJPY";
-int maxBars = 370;
+input int maxBars = 370;
 bool weighOnlySymbolOnChart = false;
 string nonPropFont = "Lucida Console";
 bool addSundayToMonday = true;
@@ -54,7 +54,7 @@ bool ignoreFuture = true;
 bool showCrossAlerts = true;
 double differenceThreshold = 0.0;
 bool showLevelCross = true;
-double levelCrossValue = 0.2;
+input double levelCrossValue = 0.2;
 bool PopupAlert = true;
 bool EmailAlert = false;
 bool PushAlert = false;
@@ -131,16 +131,16 @@ color getColorSymbol(int paramSplit)
    return clrBlack;
 }
 
-double getCofficentSymbol(int paramSplit)
+double getCofficentSymbol(int paramSplit, int i)
 {
-   if (getSymbol(paramSplit) == "USD") return Cofficent_USD;
-   if (getSymbol(paramSplit) == "EUR") return Cofficent_EUR;
-   if (getSymbol(paramSplit) == "GBP") return Cofficent_GBP;
-   if (getSymbol(paramSplit) == "CHF") return Cofficent_CHF;
-   if (getSymbol(paramSplit) == "JPY") return Cofficent_JPY;
-   if (getSymbol(paramSplit) == "AUD") return Cofficent_AUD;
-   if (getSymbol(paramSplit) == "CAD") return Cofficent_CAD;
-   if (getSymbol(paramSplit) == "NZD") return Cofficent_NZD;
+   if (getSymbol(paramSplit) == "USD") return getDataBuffers(0, i) * Cofficent_USD;
+   if (getSymbol(paramSplit) == "EUR") return getDataBuffers(1, i) * Cofficent_EUR;
+   if (getSymbol(paramSplit) == "GBP") return getDataBuffers(2, i) * Cofficent_GBP;
+   if (getSymbol(paramSplit) == "CHF") return getDataBuffers(3, i) * Cofficent_CHF;
+   if (getSymbol(paramSplit) == "JPY") return getDataBuffers(4, i) * Cofficent_JPY;
+   if (getSymbol(paramSplit) == "AUD") return getDataBuffers(5, i) * Cofficent_AUD;
+   if (getSymbol(paramSplit) == "CAD") return getDataBuffers(6, i) * Cofficent_CAD;
+   if (getSymbol(paramSplit) == "NZD") return getDataBuffers(7, i) * Cofficent_NZD;
    return 1.0;
 }
 
@@ -203,11 +203,12 @@ int OnCalculate(const int rates_total,
                 const int &spread[])
   {
 //---
-   double cof0buf = getCofficentSymbol(1);
-   double cof1buf = getCofficentSymbol(2);
-   for (int i=0; i<= maxBars; i++){
-   FirstSymbolBuffer[i] = getDataBuffers(0, i) * cof0buf;
-   SecondSymbolBuffer[i] = getDataBuffers(1, i) * cof1buf;
+   
+   for (int i=0; i <= maxBars; i++){
+   double cof0buf = getCofficentSymbol(1, i);
+   double cof1buf = getCofficentSymbol(2, i);
+   FirstSymbolBuffer[i] = cof0buf;
+   SecondSymbolBuffer[i] = cof1buf;
    ZerroBuffer[i] = 0;
    UpBuffer[i] = levelCrossValue;
    DownBuffer[i] = -levelCrossValue;
